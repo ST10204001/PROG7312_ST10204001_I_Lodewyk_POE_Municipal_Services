@@ -7,6 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <ListView ItemsSource="{Binding ServiceRequests}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" />
+                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" />
+                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
+                    <GridViewColumn Header="Submission Date" DisplayMemberBinding="{Binding SubmissionDate}" />
+                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" />
+                </GridView>
+            </ListView.View>
+        </ListView>    
     </Grid>
 </UserControl>

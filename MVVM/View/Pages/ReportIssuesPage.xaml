@@ -140,7 +140,7 @@
             </Button>
 
             <!--View All Button-->
-            <Button x:Name="viewAll" Grid.Row="3" Margin="0 40 0 0" Content="View All Issues" Style="{StaticResource secondaryButton}"/>
+            <!--<Button x:Name="viewAll" Grid.Row="3" Margin="0 40 0 0" Content="View All Issues" Style="{StaticResource secondaryButton}"/>-->
 
 
         </Grid>

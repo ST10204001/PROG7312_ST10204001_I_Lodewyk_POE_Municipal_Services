@@ -136,10 +136,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Classes\EventsManager.cs" />
-    <Compile Include="Classes\HeightConverter.cs" />
-    <Compile Include="Classes\RelayCommand.cs" />
-    <Compile Include="Classes\Validations.cs" />
+    <Compile Include="Helpers\AVLTreeNode.cs" />
+    <Compile Include="Helpers\EventsManager.cs" />
+    <Compile Include="Helpers\Graph.cs" />
+    <Compile Include="Helpers\HeightConverter.cs" />
+    <Compile Include="Helpers\RelayCommand.cs" />
+    <Compile Include="Helpers\Validations.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -188,10 +190,12 @@
   <ItemGroup>
     <Compile Include="MVVM\Model\Event.cs" />
     <Compile Include="MVVM\Model\Issue.cs" />
+    <Compile Include="MVVM\Model\ServiceRequest.cs" />
     <Compile Include="MVVM\ViewModel\CircularProgressBarViewModel.cs" />
     <Compile Include="MVVM\ViewModel\EventsViewModel.cs" />
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
     <Compile Include="MVVM\ViewModel\ReportIssuesViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\ServiceRequestViewModel.cs" />
     <Compile Include="MVVM\ViewModel\ViewModelBase.cs" />
     <Compile Include="MVVM\ViewModel\ViewModelCommand.cs" />
     <Compile Include="MVVM\View\Pages\EventsPage.xaml.cs">
