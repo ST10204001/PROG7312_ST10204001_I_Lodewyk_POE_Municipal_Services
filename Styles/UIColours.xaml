@@ -1,0 +1,51 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Background Colors -->
+    <Color x:Key="primaryBackColor1">#68B684</Color>
+    <!-- Light Green -->
+    <Color x:Key="primaryBackColor2">#A3D9A5</Color>
+    <!-- Light Green -->
+
+    <!-- Button Colors -->
+    <Color x:Key="primaryBtnColor1">#4CA64A</Color>
+    <!-- Medium Green -->
+    <Color x:Key="primaryBtnColor2">#2E7D32</Color>
+    <!-- Darker Green -->
+
+    <!-- Darker Card Colors -->
+    <Color x:Key="cardColor1">#2D8B4D</Color>
+    <!-- Darker Medium Green -->
+    <Color x:Key="cardColor2">#217A4D</Color>
+    <!-- Rich Forest Green -->
+    <SolidColorBrush x:Key="cardColor3" Color="#1C7A4B" />
+    <!-- Darker Teal Green -->
+    <SolidColorBrush x:Key="cardColor4" Color="#1F5A3D" />
+    <!-- Deep Olive Green -->
+    <SolidColorBrush x:Key="cardColor5" Color="#166F3B" />
+    <!-- Dark Mint Green -->
+
+    <!-- Additional Shades for Contrast -->
+    <SolidColorBrush x:Key="contrastColor1" Color="#FFFFFF" />
+    <!-- White for Text -->
+    <SolidColorBrush x:Key="contrastColor2" Color="#4A4A4A" />
+    <!-- Dark Gray for Text -->
+    <SolidColorBrush x:Key="contrastColor3" Color="#000000" />
+
+    <!-- Secondary Background Colors -->
+    <Color x:Key="secondaryBackColor1">#B8E994</Color>
+    <!-- Light Green -->
+    <Color x:Key="secondaryBackColor2">#72C98D</Color>
+    <!-- Light Green for Gradient -->
+    <Color x:Key="secondaryBackColor3">#3F9142</Color>
+    <!-- Medium Green for Gradient -->
+    <Color x:Key="secondaryBackColor4">#2E7D32</Color>
+    <!-- Darker Green for Contrast -->
+
+    <!-- Window Border Colors -->
+    <Color x:Key="winBorderColor1">#6DBF59</Color>
+    <!-- Medium Border Green -->
+    <Color x:Key="winBorderColor2">#5EA045</Color>
+    <!-- Darker Border Green -->
+    <Color x:Key="winBorderColor3">#4F8F3A</Color>
+    <!-- Even Darker Green -->
+</ResourceDictionary>
