@@ -41,11 +41,11 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.
 			window.ExecutePage(AppPages.Events);
 		}
 
-		private void RequestStatus_Loaded(object sender, RoutedEventArgs e)
+		private void RequestStatus_ElementClick(object sender, RoutedEventArgs e)
 		{
 			LoadWindow();
 			window.ExecutePage(AppPages.Request_Status);
 		}
-	}
+    }
 }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

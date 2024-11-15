@@ -10,6 +10,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Styles/ButtonTheme.xaml"/>
                 <ResourceDictionary Source= "Styles/UIColours.xaml"/>
+                <ResourceDictionary Source= "Styles/ListViewTheme.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

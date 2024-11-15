@@ -6,17 +6,70 @@
              xmlns:local="clr-namespace:PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <ListView ItemsSource="{Binding ServiceRequests}">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ID}" />
-                    <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" />
-                    <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
-                    <GridViewColumn Header="Submission Date" DisplayMemberBinding="{Binding SubmissionDate}" />
-                    <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" />
-                </GridView>
-            </ListView.View>
-        </ListView>    
-    </Grid>
+
+    <!--Main Layer-->
+    <Border CornerRadius="7" Background="#ffffff" >
+        <Border.Effect>
+            <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
+        </Border.Effect>
+
+        <Grid Margin="20 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+
+            <!--Form Title-->
+            <StackPanel Orientation="Horizontal" Margin="20 20 0 0">
+                <Border CornerRadius="50" BorderThickness="1.5" BorderBrush="#EFEFEF">
+                    <Ellipse Width="40" Height="50">
+                        <Ellipse.Fill>
+                            <ImageBrush ImageSource="/Imgs/coat_of_arms.png"/>
+                        </Ellipse.Fill>
+                    </Ellipse>
+                </Border>
+            </StackPanel>
+
+            <Separator Grid.Row="1" Grid.ColumnSpan="2" Height="0.7" Margin="-20 20 -20 20" Background="#E1E6EB"/>
+
+
+            <!-- List View -->
+            <ScrollViewer Grid.Row="2" Margin="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Grid>
+                    <ListView ItemsSource="{Binding ServiceRequests}" AlternationCount="2">
+                        <!-- Alternate Row Colors and Selection Background -->
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Padding" Value="5,2" />
+                                <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" />
+                                <Style.Triggers>
+                                    <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                                        <Setter Property="Background" Value="#F9F9F9" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="#E0E0E0" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+
+                        <!-- Column Definitions -->
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Id}" />
+                                <GridViewColumn Header="Description" DisplayMemberBinding="{Binding Description}" />
+                                <GridViewColumn Header="Status" DisplayMemberBinding="{Binding Status}" />
+                                <GridViewColumn Header="Request Date" DisplayMemberBinding="{Binding RequestDate, StringFormat=\{0:yyyy-MM-dd\}}" />
+                                <GridViewColumn Header="Priority" DisplayMemberBinding="{Binding Priority}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+                </Grid>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+
+
 </UserControl>

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.Classes
+namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.Helpers
 {
 	public class RelayCommand : ICommand
 	{

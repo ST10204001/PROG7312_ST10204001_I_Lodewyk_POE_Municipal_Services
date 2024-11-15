@@ -1,4 +1,4 @@
-﻿using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.Classes;
+﻿using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.Helpers;
 using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model;
 using System.Collections.ObjectModel;
 using System.Diagnostics;

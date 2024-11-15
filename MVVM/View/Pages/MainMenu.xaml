@@ -13,7 +13,7 @@
 
                 <uc:Element Title="Report Issues" Icon="Bullhorn" ElementClick="ReportIssues_ElementClick"/>
                 <uc:Element Title="Local Events" Icon="Calendar" ElementClick="LocalEvents_ElementClick" />
-                <uc:Element Title="Request Status" Icon="ClipboardCheck" ElementClick="RequestStatus_Loaded" IsEnabled="False" ToolTip="This button is disabled until further notice" ToolTipService.ShowOnDisabled="True"/>
+                <uc:Element Title="Request Status" Icon="ClipboardCheck" ElementClick="RequestStatus_ElementClick"/>
 
             </StackPanel>
         </ScrollViewer>

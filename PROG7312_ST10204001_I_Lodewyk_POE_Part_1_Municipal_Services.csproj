@@ -138,7 +138,7 @@
     </Compile>
     <Compile Include="Helpers\AVLTreeNode.cs" />
     <Compile Include="Helpers\EventsManager.cs" />
-    <Compile Include="Helpers\Graph.cs" />
+    <Compile Include="MVVM\Model\Graph.cs" />
     <Compile Include="Helpers\HeightConverter.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\Validations.cs" />
@@ -179,6 +179,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Styles\ButtonTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\ListViewTheme.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
