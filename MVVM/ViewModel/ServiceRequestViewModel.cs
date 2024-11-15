@@ -1,5 +1,6 @@
 ﻿using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.Helpers;
 using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model;
+using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +17,31 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 
 		public ObservableCollection<ServiceRequest> ServiceRequests { get; set; }
 
+		private ServiceRequest _selectedRequest;
+		
+		public ServiceRequest SelectedRequest
+		{
+			get => _selectedRequest;
+			set
+			{
+				_selectedRequest = value;
+				OnPropertyChanged(nameof(SelectedRequest));
+				if (_selectedRequest != null)
+				{
+					ShowRequestDetails();
+				}
+			}
+		}
+
+		private void ShowRequestDetails()
+		{
+			var detailWindow = new RequestDetailWindow(SelectedRequest);
+			detailWindow.ShowDialog();
+		}
+
+		/// <summary>
+		/// Default Constructor
+		/// </summary>
 		public ServiceRequestViewModel()
 		{
 			_serviceRequests = new AVLTree<ServiceRequest>();

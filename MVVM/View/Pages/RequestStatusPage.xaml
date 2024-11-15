@@ -38,7 +38,7 @@
             <!-- List View -->
             <ScrollViewer Grid.Row="2" Margin="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid>
-                    <ListView ItemsSource="{Binding ServiceRequests}" AlternationCount="2">
+                    <ListView ItemsSource="{Binding ServiceRequests}" SelectedItem="{Binding SelectedRequest, Mode=TwoWay}"  AlternationCount="2">
                         <!-- Alternate Row Colors and Selection Background -->
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
