@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.Helpers
 {
@@ -142,6 +143,22 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.Helpers
 
 			return Math.Max(leftHeight, rightHeight) + 1;
 		}
+
+		// In-order traversal to collect tree elements in sorted order
+		public List<T> InOrderTraversal()
+		{
+			var list = new List<T>();
+			InOrderTraversal(root, list);
+			return list;
+		}
+
+		// Recursive helper for in-order traversal
+		private void InOrderTraversal(AVLTreeNode<T> node, List<T> list)
+		{
+			if (node == null) return;
+			InOrderTraversal(node.Left, list);   // Traverse left subtree
+			list.Add(node.Value);                 // Add current node's value
+			InOrderTraversal(node.Right, list);  // Traverse right subtree
+		}
 	}
 }
-//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

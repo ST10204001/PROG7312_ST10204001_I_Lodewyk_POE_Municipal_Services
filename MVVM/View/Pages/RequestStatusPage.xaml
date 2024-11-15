@@ -3,12 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.Pages"
+             xmlns:local="clr-namespace:PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.Pages" 
+             xmlns:uc="clr-namespace:PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.UserControls"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
     <!--Main Layer-->
-    <Border CornerRadius="7" Background="#ffffff" >
+    <Border CornerRadius="7" Background="#ffffff">
         <Border.Effect>
             <DropShadowEffect Direction="-130" BlurRadius="30" ShadowDepth="5" Opacity="0.1"/>
         </Border.Effect>
@@ -21,24 +22,84 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
-            <!--Form Title-->
-            <StackPanel Orientation="Horizontal" Margin="20 20 0 0">
-                <Border CornerRadius="50" BorderThickness="1.5" BorderBrush="#EFEFEF">
-                    <Ellipse Width="40" Height="50">
-                        <Ellipse.Fill>
-                            <ImageBrush ImageSource="/Imgs/coat_of_arms.png"/>
-                        </Ellipse.Fill>
-                    </Ellipse>
-                </Border>
+            <!--Form Title and Filters Row-->
+            <Grid Grid.Row="0" Margin="20 20 0 10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <!-- For Search Bar -->
+                </Grid.ColumnDefinitions>
+
+                <!--Form Title-->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border CornerRadius="50" BorderThickness="1.5" BorderBrush="#EFEFEF">
+                        <Ellipse Width="40" Height="50">
+                            <Ellipse.Fill>
+                                <ImageBrush ImageSource="/Imgs/coat_of_arms.png"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                    </Border>
+                </StackPanel>
+
+                <!-- Filters and Search Bar -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+
+                    <!-- Search Bar -->
+                    <uc:MyTextBox x:Name="searchBarTextBox" Caption="Search" Hint="Search..."
+                        Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                        Width="200" Margin="0 0 20 0"/>
+                    
+                    <!-- Status Filter -->
+                    <TextBlock Text="Status:" Foreground="#97A5B4" FontSize="13" Margin="0 0 0 8"/>
+                    <ComboBox Width="150" Height="30" SelectedItem="{Binding SelectedStatusFilter, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemsSource>
+                            <x:Array Type="{x:Type sys:String}" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                                <sys:String>All</sys:String>
+                                <sys:String>Open</sys:String>
+                                <sys:String>Completed</sys:String>
+                                <sys:String>Pending</sys:String>
+                            </x:Array>
+                        </ComboBox.ItemsSource>
+                        <ComboBox.SelectedIndex>0</ComboBox.SelectedIndex>
+                    </ComboBox>
+
+                    <!-- Priority Filter -->
+                    <TextBlock Text="Priority:" Foreground="#97A5B4" FontSize="13" Margin="0 0 0 8"/>
+                    <ComboBox Width="150" Height="30" SelectedItem="{Binding SelectedPriorityFilter, UpdateSourceTrigger=PropertyChanged}">
+                        <ComboBox.ItemsSource>
+                            <x:Array Type="{x:Type sys:String}" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                                <sys:String>All</sys:String>
+                                <sys:String>High</sys:String>
+                                <sys:String>Medium</sys:String>
+                                <sys:String>Low</sys:String>
+                            </x:Array>
+                        </ComboBox.ItemsSource>
+                        <ComboBox.SelectedIndex>0</ComboBox.SelectedIndex>
+                    </ComboBox>
+                </StackPanel>
+            </Grid>
+
+            <!-- Buttons Below Filters and Search Bar -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 20">
+                <!-- Search Button -->
+                <Button Content="Search" HorizontalAlignment="Right" Style="{StaticResource mainButton}" Click="OnSearchButtonClick">
+                    <Button.Effect>
+                        <DropShadowEffect Direction="-120" BlurRadius="10" Opacity="0.3" ShadowDepth="5" Color="#A3D9A5"/>
+                    </Button.Effect>
+                </Button>
+
+                <!-- Clear Button -->
+                <Button x:Name="clearButton" Margin="10 0 0 0" Content="Clear" Style="{StaticResource secondaryButton}" Click="clearButton_Click"/>
             </StackPanel>
 
-            <Separator Grid.Row="1" Grid.ColumnSpan="2" Height="0.7" Margin="-20 20 -20 20" Background="#E1E6EB"/>
-
+            <!-- Separator -->
+            <Separator Grid.Row="2" Grid.ColumnSpan="3" Height="2" Margin="0 20 0 20" Background="#A1B0B7"/>
 
             <!-- List View -->
             <ScrollViewer Grid.Row="2" Margin="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid>
-                    <ListView ItemsSource="{Binding ServiceRequests}" SelectedItem="{Binding SelectedRequest, Mode=TwoWay}"  AlternationCount="2">
+                    <ListView ItemsSource="{Binding ServiceRequests}" SelectedItem="{Binding SelectedRequest, Mode=TwoWay}" AlternationCount="2">
                         <!-- Alternate Row Colors and Selection Background -->
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
@@ -70,6 +131,4 @@
             </ScrollViewer>
         </Grid>
     </Border>
-
-
 </UserControl>
