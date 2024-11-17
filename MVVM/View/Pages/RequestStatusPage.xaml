@@ -49,14 +49,14 @@
                     <uc:MyTextBox x:Name="searchBarTextBox" Caption="Search" Hint="Search..."
                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                         Width="200" Margin="0 0 20 0"/>
-                    
+
                     <!-- Status Filter -->
                     <TextBlock Text="Status:" Foreground="#97A5B4" FontSize="13" Margin="0 0 0 8"/>
                     <ComboBox Width="150" Height="30" SelectedItem="{Binding SelectedStatusFilter, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBox.ItemsSource>
                             <x:Array Type="{x:Type sys:String}" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                                 <sys:String>All</sys:String>
-                                <sys:String>Open</sys:String>
+                                <sys:String>In-Progress</sys:String>
                                 <sys:String>Completed</sys:String>
                                 <sys:String>Pending</sys:String>
                             </x:Array>
@@ -91,6 +91,13 @@
 
                 <!-- Clear Button -->
                 <Button x:Name="clearButton" Margin="10 0 0 0" Content="Clear" Style="{StaticResource secondaryButton}" Click="clearButton_Click"/>
+
+                <!-- New Request Button -->
+                <Button Content="New Request" HorizontalAlignment="Right" Margin="10 0 0 0" Style="{StaticResource mainButton}" Click="OnNewRequestButtonClick">
+                    <Button.Effect>
+                        <DropShadowEffect Direction="-120" BlurRadius="10" Opacity="0.3" ShadowDepth="5" Color="#A3D9A5"/>
+                    </Button.Effect>
+                </Button>
             </StackPanel>
 
             <!-- Separator -->
@@ -99,7 +106,11 @@
             <!-- List View -->
             <ScrollViewer Grid.Row="2" Margin="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid>
-                    <ListView ItemsSource="{Binding ServiceRequests}" SelectedItem="{Binding SelectedRequest, Mode=TwoWay}" AlternationCount="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="31*"/>
+                        <ColumnDefinition Width="7*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView ItemsSource="{Binding ServiceRequests}" SelectedItem="{Binding SelectedRequest, Mode=TwoWay}" AlternationCount="2" Grid.ColumnSpan="2">
                         <!-- Alternate Row Colors and Selection Background -->
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">

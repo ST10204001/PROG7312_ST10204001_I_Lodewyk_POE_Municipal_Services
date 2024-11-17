@@ -1,34 +1,50 @@
-﻿using Haley.Utils;
-using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.Helpers;
+﻿using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStructures;
 using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model;
 using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.Windows;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewModel
 {
 	public class ServiceRequestViewModel : ViewModelBase
 	{
-		// Private members for the service requests, graph, selected request, and filters
+		// ----------------------------------------------------------------------------------------------------------------------------
+		// Private Members
 		private AVLTree<ServiceRequest> _serviceRequests;
 		private Graph _serviceRequestGraph;
-		public ObservableCollection<ServiceRequest> ServiceRequests { get; set; }
+		private HashSet<int> _usedIds = new HashSet<int>();
 		private ServiceRequest _selectedRequest;
 		private ObservableCollection<ServiceRequest> _filteredRequests;
+		private int _serviceRequestCount = 0;
 
-		// Filter properties for search, status, and priority
+		// Filter properties
 		private string _searchText;
-		private string _selectedStatusFilter = "All";  // Default to "All"
-		private string _selectedPriorityFilter = "All";  // Default to "All"
+		private string _selectedStatusFilter = "All";
+		private string _selectedPriorityFilter = "All";
 
-		// Property for filtered requests, triggers property changed notification
+		// Static file path for persistence
+		private static readonly string FILEPATH = GetFilePath();
+
+		// ----------------------------------------------------------------------------------------------------------------------------
+		// Properties
+
+		public int NextAvailableId
+		{
+			get
+			{
+				int nextId = GetNextRequestId();
+				return nextId;
+			}
+		}
+
+		public ObservableCollection<ServiceRequest> ServiceRequests { get; set; }
+
 		public ObservableCollection<ServiceRequest> FilteredRequests
 		{
-			get { return _filteredRequests; }
+			get => _filteredRequests;
 			set
 			{
 				_filteredRequests = value;
@@ -36,43 +52,39 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 			}
 		}
 
-		// Property for search text input, triggers filtering when changed
 		public string SearchText
 		{
-			get { return _searchText; }
+			get => _searchText;
 			set
 			{
 				_searchText = value;
 				OnPropertyChanged(nameof(SearchText));
-				FilterRequests();  // Apply filter when search text changes
+				FilterRequests(); // Trigger filtering
 			}
 		}
 
-		// Property for selected status filter, triggers filtering when changed
 		public string SelectedStatusFilter
 		{
-			get { return _selectedStatusFilter; }
+			get => _selectedStatusFilter;
 			set
 			{
 				_selectedStatusFilter = value;
 				OnPropertyChanged(nameof(SelectedStatusFilter));
-				FilterRequests();  // Apply filter when status filter changes
+				FilterRequests(); // Trigger filtering
 			}
 		}
 
-		// Property for selected priority filter, triggers filtering when changed
 		public string SelectedPriorityFilter
 		{
-			get { return _selectedPriorityFilter; }
+			get => _selectedPriorityFilter;
 			set
 			{
 				_selectedPriorityFilter = value;
 				OnPropertyChanged(nameof(SelectedPriorityFilter));
-				FilterRequests();  // Apply filter when priority filter changes
+				FilterRequests(); // Trigger filtering
 			}
 		}
 
-		// Property for the selected service request, triggers request detail view
 		public ServiceRequest SelectedRequest
 		{
 			get => _selectedRequest;
@@ -82,147 +94,194 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 				OnPropertyChanged(nameof(SelectedRequest));
 				if (_selectedRequest != null)
 				{
-					ShowRequestDetails();  // Show details when a request is selected
+					ShowRequestDetails(); // Display details on selection
 				}
 			}
 		}
 
-		//----------------------------------------------------------------------------------------------------------------------------//
+		// ----------------------------------------------------------------------------------------------------------------------------
+		// Default Constructor
+
 		/// <summary>
-		/// Method to filter the list of service requests based on search text, status, and priority
+		/// Initializes the ServiceRequestViewModel by loading existing requests and setting up structures.
+		/// </summary>
+		public ServiceRequestViewModel()
+		{
+			_usedIds.Clear();
+
+			_serviceRequests = new AVLTree<ServiceRequest>();
+			ServiceRequests = new ObservableCollection<ServiceRequest>();
+			_serviceRequestGraph = new Graph();
+
+			LoadExistingRequests();
+
+			TestAVLTree();
+			//TestGraph();
+		}
+
+		// ----------------------------------------------------------------------------------------------------------------------------
+		// Public Methods
+
+		/// <summary>
+		/// Adds a new service request to the AVL Tree and ObservableCollection.
+		/// </summary>
+		public void AddNewRequest(string description, string status, string priority, DateTime date)
+		{
+			var newRequest = new ServiceRequest
+			{
+				Id = NextAvailableId,
+				Description = description,
+				Status = status,
+				Priority = priority,
+				RequestDate = date
+			};
+     
+			AddRequest(newRequest);
+		}
+
+		/// <summary>
+		/// Searches for a service request by ID in the AVL Tree.
+		/// </summary>
+		public ServiceRequest SearchRequest(int id) =>
+			_serviceRequests.Find(new ServiceRequest { Id = id });
+
+
+		/// <summary>
+		/// Filters service requests based on search text, status, and priority.
 		/// </summary>
 		public void FilterRequests()
 		{
-			// Get all service requests using in-order traversal
 			var serviceRequestList = _serviceRequests.InOrderTraversal();
 
-			// Apply filters for search text, status, and priority
 			var filtered = serviceRequestList
 				.Where(r =>
-					!string.IsNullOrEmpty(r.Description) &&
-					(string.IsNullOrEmpty(SearchText) || r.Description.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0) &&
-					(string.IsNullOrEmpty(SelectedStatusFilter) || SelectedStatusFilter == "All" || r.Status == SelectedStatusFilter) &&
-					(string.IsNullOrEmpty(SelectedPriorityFilter) || SelectedPriorityFilter == "All" || r.Priority == SelectedPriorityFilter))
+					(string.IsNullOrEmpty(SearchText) || r.Description?.IndexOf(SearchText, StringComparison.OrdinalIgnoreCase) >= 0) &&
+					(SelectedStatusFilter == "All" || r.Status == SelectedStatusFilter) &&
+					(SelectedPriorityFilter == "All" || r.Priority == SelectedPriorityFilter))
 				.ToList();
 
-			// Clear the existing items in ServiceRequests
 			ServiceRequests.Clear();
-
-			// Add the filtered items to ServiceRequests
 			foreach (var request in filtered)
 			{
 				ServiceRequests.Add(request);
 			}
 		}
-		//----------------------------------------------------------------------------------------------------------------------------//
+
+		// ----------------------------------------------------------------------------------------------------------------------------
+		// Private Methods
+
 		/// <summary>
-		/// Method to show details of the selected service request in a new window
+		/// Loads existing service requests from the JSON file.
+		/// </summary>
+		private void LoadExistingRequests()
+		{
+			_usedIds.Clear();
+
+			_serviceRequests = AVLTree<ServiceRequest>.LoadFromJson(FILEPATH, request =>
+			{
+				ServiceRequests.Add(request);
+				_usedIds.Add(request.Id);
+			}) ?? new AVLTree<ServiceRequest>();
+
+			// Ensure NextAvailableId is updated after loading
+			OnPropertyChanged(nameof(NextAvailableId));
+		}
+
+
+		/// <summary>
+		/// Adds a new service request to the data structures.
+		/// </summary>
+		private void AddRequest(ServiceRequest request)
+		{
+			// Ensure the ID is unique before adding it to the used IDs set
+			if (_usedIds.Contains(request.Id))
+			{
+				throw new InvalidOperationException($"Duplicate ID detected: {request.Id}");
+			}
+
+			// Add the new request to the AVL tree and the ObservableCollection
+			_serviceRequests.Insert(request);
+			ServiceRequests.Add(request);
+
+			// Add the new ID to the used IDs set now that it's confirmed to be unique
+			_usedIds.Add(request.Id);
+
+			// Save the updated requests to the JSON file
+			_serviceRequests.SaveToJson(FILEPATH);
+		}
+
+		/// <summary>
+		/// Generates a unique ID for a new service request.
+		/// </summary>
+		private int GetNextRequestId()
+		{
+			int newId = _usedIds.DefaultIfEmpty(0).Max() + 1; // Generate the next ID based on the maximum used ID
+
+			// Ensure that the ID is unique by checking before returning it
+			while (_usedIds.Contains(newId))
+			{
+				newId++;  // If the ID already exists, increment until a unique one is found
+			}
+
+			Console.WriteLine("Generated Request ID: " + newId);
+
+			// Return the unique ID (it will never conflict with any existing ones)
+			return newId;
+		}
+
+		/// <summary>
+		/// Displays details of the selected service request.
 		/// </summary>
 		private void ShowRequestDetails()
 		{
 			var detailWindow = new RequestDetailWindow(SelectedRequest);
 			detailWindow.ShowDialog();
 		}
-		//----------------------------------------------------------------------------------------------------------------------------//
-		/// <summary>
-		/// Default Constructor: Initializes data structures, adds hardcoded data, and tests AVLTree and Graph functionality
-		/// </summary>
-		public ServiceRequestViewModel()
-		{
-			_serviceRequests = new AVLTree<ServiceRequest>();
-			ServiceRequests = new ObservableCollection<ServiceRequest>();
-			_serviceRequestGraph = new Graph();
 
-			// Add hardcoded data
-			AddHardcodedData();
-			TestAVLTree();
-			TestGraph();
-		}
-		//----------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
-		/// Method to test AVL Tree functionality (root and balance status)
+		/// Tests AVL Tree functionality (root and balance status).
 		/// </summary>
 		private void TestAVLTree()
 		{
 			Console.WriteLine("AVL Tree Root ID: " + _serviceRequests.Root?.Value.Id);
 			Console.WriteLine("Is Tree Balanced: " + _serviceRequests.IsBalanced());
 		}
-		//----------------------------------------------------------------------------------------------------------------------------//
+
 		/// <summary>
-		/// Method to test Graph functionality (BFS traversal)
+		/// Tests graph functionality (BFS traversal).
 		/// </summary>
 		private void TestGraph()
 		{
-			// Example: Traverse from the first request and print related IDs
+			Graph graph = new Graph();
+			//graph.LoadFromJson(FILEPATH);
 			var relatedRequests = _serviceRequestGraph.TraverseBFS(1);
 			Console.WriteLine("Related Service Requests:");
 			foreach (var requestId in relatedRequests)
 				Console.WriteLine(requestId);
 		}
-		//----------------------------------------------------------------------------------------------------------------------------//
+
 		/// <summary>
-		/// Method to add hardcoded service requests to both the AVL Tree and ObservableCollection
+		/// Ensures the directory for the JSON file exists.
 		/// </summary>
-		private void AddHardcodedData()
+		private static void EnsureDirectoryExists(string filePath)
 		{
-			_serviceRequestGraph = new Graph();
-			for (int i = 1; i <= 50; i++)
+			string directoryPath = Path.GetDirectoryName(filePath);
+			if (!Directory.Exists(directoryPath))
 			{
-				var serviceRequest = new ServiceRequest
-				{
-					Id = i,
-					Description = $"Service request #{i}",
-					Status = i % 2 == 0 ? "Completed" : "Pending", // Alternating between "Completed" and "Pending"
-					RequestDate = DateTime.Now.AddDays(-i), // Stagger the request dates
-					Priority = (i % 3 == 0) ? "High" : (i % 2 == 0 ? "Medium" : "Low") // Alternating priorities
-				};
-
-				_serviceRequests.Insert(serviceRequest); // Assuming AVLTree has an Insert method
-				ServiceRequests.Add(serviceRequest); // Add to ObservableCollection for UI binding
-
-				if (i > 1)
-				{
-					_serviceRequestGraph.AddEdge(i, i - 1); // Sample edge between consecutive requests
-				}
+				Directory.CreateDirectory(directoryPath);
 			}
 		}
-		//----------------------------------------------------------------------------------------------------------------------------//
+
 		/// <summary>
-		/// Method to add a new service request to the AVL Tree and ObservableCollection
+		/// Gets the file path for storing service requests.
 		/// </summary>
-		/// <param name="request"></param>
-		public void AddRequest(ServiceRequest request)
+		private static string GetFilePath()
 		{
-			_serviceRequests.Insert(request);
-			ServiceRequests.Add(request);  // Update observable collection for UI binding
+			string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			string filePath = Path.Combine(baseDirectory, "File", "requests.json");
+			EnsureDirectoryExists(filePath);
+			return filePath;
 		}
-		//----------------------------------------------------------------------------------------------------------------------------//
-		/// <summary>
-		/// Method to search for a service request by ID in the AVL Tree
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		public ServiceRequest SearchRequest(int id)
-		{
-			ServiceRequest searchRequest = new ServiceRequest { Id = id };
-			return _serviceRequests.Find(searchRequest);  // Pass ServiceRequest object
-		}
-		//----------------------------------------------------------------------------------------------------------------------------//
-		/// <summary>
-		/// Method to update the status of a service request by its ID
-		/// </summary>
-		/// <param name="id"></param>
-		/// <param name="status"></param>
-		public void UpdateRequestStatus(int id, string status)
-		{
-			var request = SearchRequest(id);
-			if (request != null)
-			{
-				request.Status = status;
-				OnPropertyChanged(nameof(ServiceRequests));
-			}
-		}
-		//----------------------------------------------------------------------------------------------------------------------------//
 	}
 }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

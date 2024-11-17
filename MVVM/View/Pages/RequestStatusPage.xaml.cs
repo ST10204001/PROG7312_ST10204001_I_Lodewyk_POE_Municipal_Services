@@ -1,10 +1,5 @@
-﻿using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model;
+﻿using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.Windows;
 using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -36,5 +31,12 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.
 			viewModel.SelectedPriorityFilter = string.Empty;
 			viewModel.FilterRequests();  // Re-filter to show all results
 		}
-	}
+
+		private void OnNewRequestButtonClick(object sender, RoutedEventArgs e)
+		{
+			var newRequestWindow = new NewRequestWindow();
+			newRequestWindow.ShowDialog();
+		}
+    }
 }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

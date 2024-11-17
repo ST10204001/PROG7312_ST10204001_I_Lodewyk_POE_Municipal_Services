@@ -1,0 +1,353 @@
+[
+  {
+    "Id": 1,
+    "Description": "Request for road pothole repair on Main Street, Cape Town.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-15T10:30:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 2,
+    "Description": "Broken streetlight on Pine Avenue, Johannesburg.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-16T08:45:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 3,
+    "Description": "Water leak in the kitchen area of the municipal building in Pretoria.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-28T14:20:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 4,
+    "Description": "Overgrown grass and weeds on the sidewalk at the corner of Olive and 4th Avenue, Durban.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-17T12:10:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 5,
+    "Description": "Damaged water meter on Regent Road, Port Elizabeth.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-14T09:00:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 6,
+    "Description": "Flooding issue due to blocked drain on Somerset Road, Cape Town.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-30T16:40:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 7,
+    "Description": "Sewer backup near Hillcrest Park, Johannesburg.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-05T11:30:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 8,
+    "Description": "Public toilet cleanliness complaint at the Durban beachfront.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-20T07:50:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 9,
+    "Description": "Electricity outage in Morningside, Durban.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-10T18:20:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 10,
+    "Description": "Broken traffic signal on Church Street, Pretoria.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-08T13:00:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 11,
+    "Description": "Uncollected garbage on Oak Street, Johannesburg.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-12T09:15:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 12,
+    "Description": "Streetlight malfunction at the intersection of 7th and Simonsberg, Cape Town.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-27T14:00:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 13,
+    "Description": "Request for tree trimming along the public park in Bloemfontein.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-14T10:00:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 14,
+    "Description": "Request to fix leaking roof at the community center in East London.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-11T15:00:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 15,
+    "Description": "Request for installation of speed bumps on Pine Street, Polokwane.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-25T10:30:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 16,
+    "Description": "Broken fire hydrant near Sunset Boulevard, Pretoria.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-09T13:00:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 17,
+    "Description": "Street cleaning request for Forest Drive, Johannesburg.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-13T16:40:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 18,
+    "Description": "Request for new water pipeline installation at the Old Railway Line, Durban.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-22T08:00:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 19,
+    "Description": "Overflowing sewage drain near Newlands Village, Cape Town.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-09-30T17:30:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 20,
+    "Description": "Request for fixing damaged road signs near Malibongwe Drive, Johannesburg.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-04T12:15:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 21,
+    "Description": "Broken pavement near University of Pretoria campus.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-01T11:30:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 22,
+    "Description": "Maintenance required for park benches at Greenpoint Park, Cape Town.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-18T09:00:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 23,
+    "Description": "Request to repair malfunctioning escalators at Park Station, Johannesburg.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-15T14:00:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 24,
+    "Description": "Request for road resurfacing on William Nicol Drive, Sandton.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-02T08:30:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 25,
+    "Description": "Broken gate at the entrance of Greenways Estate, Cape Town.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-23T16:00:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 26,
+    "Description": "Request for road repair near 3rd Avenue, Durban.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-03T10:00:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 27,
+    "Description": "Request for installation of additional streetlights in the area near the mall in Polokwane.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-12T13:30:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 28,
+    "Description": "Disruption in water supply on Robert Sobukwe Road, Cape Town.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-28T12:10:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 29,
+    "Description": "Public park lighting malfunction at Rivonia Road, Johannesburg.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-01T17:45:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 30,
+    "Description": "Pothole repair request at the corner of 15th Street and Main Road, Pretoria.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-09-19T11:00:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 31,
+    "Description": "Request for fixing broken municipal drainage system in Bloemfontein.",
+    "Status": "Pending",
+    "RequestDate": "2024-09-29T15:30:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 32,
+    "Description": "Damaged sidewalk near the public library on Kerk Street, Polokwane.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-05T10:00:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 33,
+    "Description": "Request for waste collection on weekends in rural areas of Western Cape.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-18T10:30:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 34,
+    "Description": "Missing traffic signs at the corner of 10th Avenue and Morningside Drive, Durban.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-09-25T14:30:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 35,
+    "Description": "Street cleaning in the city center of Johannesburg during peak hours.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-21T11:45:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 36,
+    "Description": "Fire hydrant inspection request on 9th Avenue, Pretoria.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-06T10:00:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 37,
+    "Description": "Broken public bench at the beachfront in Durban.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-07T15:00:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 38,
+    "Description": "Sewage overflow in the stormwater drains near the airport in Polokwane.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-10T12:30:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 39,
+    "Description": "Request for road patching on Salt River Road, Cape Town.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-09-19T10:15:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 40,
+    "Description": "Public transport bus stop shelter maintenance on 5th Street, Johannesburg.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-13T11:30:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 41,
+    "Description": "Damaged water pipe near the golf course in Bloemfontein.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-04T10:45:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 42,
+    "Description": "Blocked storm drain near Kyalami Village, Johannesburg.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-26T13:20:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 43,
+    "Description": "Noise complaint regarding street construction near Parkwood, Cape Town.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-03T14:45:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 44,
+    "Description": "Request to install additional waste bins on Main Street, Polokwane.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-08T17:30:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 45,
+    "Description": "Broken parking meter at the city center, Durban.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-17T13:50:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 46,
+    "Description": "Malfunctioning streetlight at the entrance of Pretoria East shopping mall.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-10-02T16:20:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 47,
+    "Description": "Broken traffic barrier on N1 highway near Stellenbosch.",
+    "Status": "Pending",
+    "RequestDate": "2024-09-28T15:00:00",
+    "Priority": "High"
+  },
+  {
+    "Id": 48,
+    "Description": "Request for fixing pedestrian crossing signal near the university campus in Bloemfontein.",
+    "Status": "In-Progress",
+    "RequestDate": "2024-09-25T17:00:00",
+    "Priority": "Medium"
+  },
+  {
+    "Id": 49,
+    "Description": "Request for public park cleanup after the weekend in Port Elizabeth.",
+    "Status": "Completed",
+    "RequestDate": "2024-09-22T09:30:00",
+    "Priority": "Low"
+  },
+  {
+    "Id": 50,
+    "Description": "Request for water meter reading in Centurion.",
+    "Status": "Pending",
+    "RequestDate": "2024-10-11T11:30:00",
+    "Priority": "Low"
+  }
+]
+

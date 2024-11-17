@@ -62,6 +62,9 @@
     <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Xaml.Behaviors.Wpf.1.1.39\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="protobuf-net, Version=3.0.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
       <HintPath>packages\protobuf-net.3.2.16\lib\net462\protobuf-net.dll</HintPath>
     </Reference>
@@ -136,7 +139,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\AVLTreeNode.cs" />
+    <Compile Include="DataStructures\AVLTree.cs" />
+    <Compile Include="DataStructures\AVLTreeNode.cs" />
     <Compile Include="Helpers\EventsManager.cs" />
     <Compile Include="MVVM\Model\Graph.cs" />
     <Compile Include="Helpers\HeightConverter.cs" />
@@ -175,6 +179,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\UserControls\MyTextBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\Windows\NewRequestWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -230,6 +238,9 @@
     <Compile Include="MVVM\View\UserControls\MyTextBox.xaml.cs">
       <DependentUpon>MyTextBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MVVM\View\Windows\NewRequestWindow.xaml.cs">
+      <DependentUpon>NewRequestWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\Windows\RequestDetailWindow.xaml.cs">
       <DependentUpon>RequestDetailWindow.xaml</DependentUpon>
     </Compile>
@@ -250,6 +261,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="File\requests.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -278,5 +292,6 @@
   <ItemGroup>
     <Resource Include="Imgs\banner.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
