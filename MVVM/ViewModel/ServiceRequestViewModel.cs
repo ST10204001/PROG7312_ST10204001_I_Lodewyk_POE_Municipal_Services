@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Windows.Input;
 
 namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewModel
@@ -15,15 +16,16 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 		// Private Members
 		private AVLTree<ServiceRequest> _serviceRequests;
 		private readonly PriorityQueue<ServiceRequest> _priorityQueue; // Priority Queue for service requests based on priority
-		private readonly Graph<ServiceRequest> _serviceRequestGraph; // Graph for managing relationships between requests
+		private readonly Graph _serviceRequestGraph; // Graph for managing relationships between requests
 		private readonly List<int> _usedIds = new List<int>(); // Track used IDs
-		private ServiceRequest _selectedRequest; 
+		private ServiceRequest _selectedRequest;
+		private string _graphCanvas = string.Empty;
 
 		//Commands
 		public ICommand SearchCommand { get; }
 		public ICommand ClearCommand { get; }
 		public ICommand NewRequestCommand { get; }
-
+		public ICommand DisplayGraphCommand { get; set; }
 
 		// ----------------------------------------------------------------------------------------------------------------------------
 		// Properties
@@ -59,6 +61,16 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 				}
 			}
 		}
+		public string GraphCanvas
+		{
+			get => _graphCanvas;
+			set
+			{
+				_graphCanvas = value;
+				OnPropertyChanged(nameof(GraphCanvas));  // Notify the UI to update
+			}
+		}
+
 		public string SearchText { get; set; }
 		public ServiceRequest SelectedRequest
 		{
@@ -94,11 +106,7 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 			// Initialize data structures
 			_serviceRequests = new AVLTree<ServiceRequest>();
 			_priorityQueue = new PriorityQueue<ServiceRequest>();
-			_serviceRequestGraph = new Graph<ServiceRequest>();
-
-
-			//_serviceRequestGraph = new Graph(); // Graph for relationships
-
+			_serviceRequestGraph = new Graph(); // Graph for relationships
 
 			// Immediately apply the filters after setting default values
 			FilterRequests();
@@ -107,6 +115,7 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 			SearchCommand = new RelayCommand(OnSearch);
 			ClearCommand = new RelayCommand(OnClear);
 			NewRequestCommand = new RelayCommand(OnNewRequest);
+			DisplayGraphCommand = new RelayCommand(DisplayGraph);
 
 			// Load data from an existing source
 			LoadExistingRequests();
@@ -141,10 +150,50 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 			_serviceRequests.Insert(newRequest); // AVL Tree
 			_priorityQueue.Enqueue(newRequest); // PriorityQueue
 			ServiceRequests.Add(newRequest); // ObservableCollection for UI
-			_usedIds.Add(newRequest.Id);	
-			
+			_usedIds.Add(newRequest.Id);
+
+			// Add to graph as a new node (example: each request is a node)
+			_serviceRequestGraph.AddRequest(newRequest);  // Assuming AddNode is a method in Graph
+
 			_serviceRequests.SaveToJson();
 		}
+
+		public void DisplayGraph()
+		{
+			// Generate the graph description as a string
+			string graphText = GenerateGraphText(_serviceRequestGraph);
+
+			// Set the generated text to the TextBox (you can bind this to the UI)
+			GraphCanvas = graphText;  // Assuming GraphCanvas is the TextBox that holds the graph representation
+		}
+
+		// This method generates a textual description of the graph
+		private string GenerateGraphText(Graph graph)
+		{
+			var graphStringBuilder = new StringBuilder();
+
+			// Traverse the graph's adjacency list
+			foreach (var node in graph.AdjacencyList)
+			{
+				var request = ServiceRequests.FirstOrDefault(r => r.Id == node.Key);
+				if (request != null)
+				{
+					graphStringBuilder.AppendLine($"Request ID: {request.Id}, Description: {request.Description}");
+
+					// Display edges (relationships between requests)
+					foreach (var neighbour in node.Value)
+					{
+						graphStringBuilder.AppendLine($"  -> Connected to Request ID: {neighbour.End.Id}, Description: {neighbour.End.Description}");
+					}
+				}
+				graphStringBuilder.AppendLine();  // Add a line break between nodes for better readability
+			}
+
+			return graphStringBuilder.ToString();
+		}
+
+		// ----------------------------------------------------------------------------------------------------------------------------
+		// Private Methods
 
 		/// <summary>
 		/// Filters service requests based on search text, status, and priority.
@@ -189,9 +238,6 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 			return SelectedPriorityFilter == "All" || request.Priority == SelectedPriorityFilter;
 		}
 
-		// ----------------------------------------------------------------------------------------------------------------------------
-		// Private Methods
-
 		/// <summary>
 		/// Loads existing service requests from the JSON file.
 		/// </summary>
@@ -213,22 +259,6 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 				Console.WriteLine($"Error loading requests: {ex.Message}");
 			}
 		}
-
-		// Get the priority level of a service request
-/*		private int GetPriorityLevel(string priority)
-		{
-			switch (priority)
-			{
-				case "High":
-					return 1;
-				case "Medium":
-					return 2;
-				case "Low":
-					return 3;
-				default:
-					return 4; // Default case for unknown priority
-			}
-		}*/
 
 		/// <summary>
 		/// Generates a unique ID for a new service request.

@@ -18,9 +18,13 @@
 
         <Grid Margin="20 0">
             <Grid.RowDefinitions>
+                <!-- Row for form title and filters -->
                 <RowDefinition Height="auto"/>
+                <!-- Row for buttons -->
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
+                <!-- Row for the graph (expands) -->
+                <RowDefinition Height="*" MaxHeight="100" />
+                <!-- Row for list view -->
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
 
@@ -100,13 +104,29 @@
                         <DropShadowEffect Direction="-120" BlurRadius="10" Opacity="0.3" ShadowDepth="5" Color="#A3D9A5"/>
                     </Button.Effect>
                 </Button>
+
+                <Button Content="Show Graph" Command="{Binding DisplayGraphCommand}" Margin="10 0 0 0" Style="{StaticResource mainButton}" />
+
             </StackPanel>
 
             <!-- Separator -->
             <Separator Grid.Row="2" Grid.ColumnSpan="3" Height="2" Margin="0 20 0 20" Background="#A1B0B7"/>
-
+ 
+            <!-- Display graph as text -->
+            <TextBox
+                 Text="{Binding GraphCanvas}" 
+                 Grid.Row="2"
+                 VerticalScrollBarVisibility="Auto" 
+                 HorizontalScrollBarVisibility="Auto" 
+                 AcceptsReturn="True" 
+                 IsReadOnly="True" 
+                 FontFamily="Consolas" 
+                 FontSize="14" 
+                 VerticalAlignment="Top" 
+                 Margin="10,10,10,10"/>
+            
             <!-- List View -->
-            <ScrollViewer Grid.Row="2" Margin="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ScrollViewer Grid.Row="3" Margin="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="31*"/>

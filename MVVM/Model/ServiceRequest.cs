@@ -11,6 +11,10 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model
 		public DateTime RequestDate { get; set; }
 		public string Priority { get; set; }  // e.g., High, Medium, Low
 
+		// Add properties for graph visualization
+		public double XPosition { get; set; }
+		public double YPosition { get; set; }
+
 		// Implement IComparable to compare by Priority, RequestDate, or Id
 		public int CompareTo(ServiceRequest other)
 		{

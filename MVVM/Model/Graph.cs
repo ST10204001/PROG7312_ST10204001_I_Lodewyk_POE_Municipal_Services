@@ -1,44 +1,44 @@
-﻿using System;
+﻿using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStructures;
+using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+using System.Linq;
 
 namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model
 {
-	public class Graph<T>
+	public class Graph
 	{
-		private Dictionary<T, List<T>> _adjacencyList = new Dictionary<T, List<T>>();
+		public Dictionary<int, ServiceRequest> Requests { get; set; }
+		public Dictionary<int, List<Edge>> AdjacencyList { get; set; }
 
-		// Add a node to the graph
-		public void AddNode(T node)
+		public Graph()
 		{
-			if (!_adjacencyList.ContainsKey(node))
+			Requests = new Dictionary<int, ServiceRequest>();
+			AdjacencyList = new Dictionary<int, List<Edge>>();
+		}
+
+		// Add request to the graph
+		public void AddRequest(ServiceRequest request)
+		{
+			if (!Requests.ContainsKey(request.Id))
 			{
-				_adjacencyList[node] = new List<T>();
+				Requests.Add(request.Id, request);
+				AdjacencyList[request.Id] = new List<Edge>();
 			}
 		}
 
-		// Add an edge between two nodes (directed edge from node1 to node2)
-		public void AddEdge(T node1, T node2)
+	
+		public List<Edge> GetAllEdges()
 		{
-			if (!_adjacencyList.ContainsKey(node1))
+			var edges = new List<Edge>();
+			foreach (var edgeList in AdjacencyList.Values)
 			{
-				AddNode(node1);
+				edges.AddRange(edgeList);
 			}
-
-			if (!_adjacencyList.ContainsKey(node2))
-			{
-				AddNode(node2);
-			}
-
-			_adjacencyList[node1].Add(node2);
+			return edges;
 		}
 
-		// Get adjacent nodes for a given node
-		public List<T> GetAdjacentNodes(T node)
-		{
-			return _adjacencyList.ContainsKey(node) ? _adjacencyList[node] : new List<T>();
-		}
+		public int NodeCount => Requests.Count;
+
 	}
 }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
