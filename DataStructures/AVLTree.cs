@@ -3,6 +3,7 @@ using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml.Linq;
 
 namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStructures
 {
@@ -14,9 +15,24 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStruct
 	{
 		// FILEPATH
 		private static readonly string _filePath = GetFilePath();
-
+	
 		// Root node of the tree
 		private AVLTreeNode<T> root;
+
+		// Public method to return the count of nodes in the tree
+		public int CountNodes()
+		{
+			return CountNodes(root);
+		}
+
+		// Recursive helper method to count nodes starting from a given node
+		private int CountNodes(AVLTreeNode<T> node)
+		{
+			if (node == null)
+				return 0;
+
+			return 1 + CountNodes(node.Left) + CountNodes(node.Right);
+		}
 
 		//-----------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
@@ -345,18 +361,6 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStruct
 			SearchRecursive(node.Right, predicate, results);
 		}
 
-
-		public IEnumerator<T> GetEnumerator()
-		{
-			// Perform an in-order traversal and return an enumerator over the results.
-			foreach (var value in InOrderTraversal())
-			{
-				yield return value;  // Yield each value in the in-order traversal.
-			}
-		}
-
-		//IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-
 		public List<T> ToList()
 		{
 			var list = new List<T>();
@@ -365,8 +369,7 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStruct
 				InOrderTraversal(root, list);
 			}
 			return list;
-		}
-
+		}	
 	}
 }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
