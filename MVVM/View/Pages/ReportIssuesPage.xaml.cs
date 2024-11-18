@@ -1,6 +1,5 @@
 ﻿using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.UserControls;
 using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewModel;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
@@ -36,7 +35,6 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.
 			var textBoxes = new List<MyTextBox>
 			{
 				locationTextBox,
-				categoryTextBox,
 				descriptionTextBox
 			};
 

@@ -16,6 +16,13 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.Helpers
 		{ 
 		}
 		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		private bool AreRequiredFieldsFilled(string LocationText, string CategoryText, string DescriptionText)
+		{
+			return !string.IsNullOrWhiteSpace(LocationText) &&
+				   !string.IsNullOrWhiteSpace(CategoryText) &&
+				   !string.IsNullOrWhiteSpace(DescriptionText);
+		}
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// 
 		/// </summary>

@@ -1,14 +1,8 @@
-﻿using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
+﻿using System;
 
 namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model
 {
-	public class Issue : ViewModelBase
+	public class Issue : IComparable<Issue>
 	{
 		//Fields
 		public string Location { get; set; }
@@ -20,14 +14,14 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model
 		public bool IsImage => MediaUrl.EndsWith(".jpg") || MediaUrl.EndsWith(".png");
 		public bool IsDocumentOrVideo => MediaUrl.EndsWith(".pdf") || MediaUrl.EndsWith(".mp4");
 
-
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// Default Constructor
 		/// </summary>
 		public Issue()
 		{
 		}
-
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// Constructor
 		/// </summary>
@@ -42,60 +36,37 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model
 			Description = description;
 			MediaUrl = mediaUrl;
 		}
-
-/*		//Properties
-		public string Location
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		// Implement IComparable<Issue>
+		public int CompareTo(Issue other)
 		{
-			get
-			{
-				return location;
-			}
-			set 
-			{ 
-				location = value;
-				OnPropertyChanged(nameof(location));
-			}
+			if (other == null) return 1; // Nulls are considered less than any instance
+
+			// Compare based on media type first (image vs document/video)
+			if (IsImage && !other.IsImage) return -1;  // Current issue is an image, consider it "less"
+			if (!IsImage && other.IsImage) return 1;   // Current issue is not an image, consider it "greater"
+
+			// If media types are the same, compare by Location
+			int locationComparison = string.Compare(Location, other.Location, StringComparison.Ordinal);
+			if (locationComparison != 0) return locationComparison;
+
+			// Compare by Category and Description
+			int categoryComparison = string.Compare(Category, other.Category, StringComparison.Ordinal);
+			if (categoryComparison != 0) return categoryComparison;
+
+			return string.Compare(Description, other.Description, StringComparison.Ordinal);
 		}
-
-		public string Category
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Override ToString (optional) for better debugging and display
+		/// </summary>
+		/// <returns></returns>
+		public override string ToString()
 		{
-			get
-			{
-				return category;
-			}
-			set
-			{
-				category = value;
-				OnPropertyChanged(nameof(category));
-			}
+			return $"Location: {Location}, Category: {Category}, Description: {Description}, MediaUrl: {MediaUrl}";
 		}
-
-		public string Description
-		{
-			get
-			{
-				return description;
-			}
-			set
-			{
-				description = value;
-				OnPropertyChanged(nameof(description));
-			}
-		}
-
-		public string MediaAttachment
-		{
-			get
-			{
-				return mediaAttachment;
-			}
-			set
-			{
-				mediaAttachment = value;
-				OnPropertyChanged(nameof(mediaAttachment));
-			}
-		}*/
 
 
 	}
 }
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//

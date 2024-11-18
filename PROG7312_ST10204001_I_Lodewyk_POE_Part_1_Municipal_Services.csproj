@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -141,7 +142,11 @@
     </Compile>
     <Compile Include="DataStructures\AVLTree.cs" />
     <Compile Include="DataStructures\AVLTreeNode.cs" />
+    <Compile Include="DataStructures\Heap.cs" />
+    <Compile Include="DataStructures\PriorityQueue.cs" />
+    <Compile Include="DataStructures\RedBlackTree.cs" />
     <Compile Include="Helpers\EventsManager.cs" />
+    <Compile Include="Helpers\RequestManager.cs" />
     <Compile Include="MVVM\Model\Graph.cs" />
     <Compile Include="Helpers\HeightConverter.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
@@ -183,6 +188,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MVVM\View\Windows\NewRequestWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MVVM\View\Windows\IssueDetailWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -240,6 +249,9 @@
     </Compile>
     <Compile Include="MVVM\View\Windows\NewRequestWindow.xaml.cs">
       <DependentUpon>NewRequestWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\Windows\IssueDetailWindow.xaml.cs">
+      <DependentUpon>IssueDetailWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\Windows\RequestDetailWindow.xaml.cs">
       <DependentUpon>RequestDetailWindow.xaml</DependentUpon>

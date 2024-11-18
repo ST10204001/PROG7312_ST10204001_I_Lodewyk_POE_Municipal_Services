@@ -61,7 +61,7 @@
 
             <!--List View-->
             <ScrollViewer Grid.Column="0" Grid.Row="2" Margin="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <ListView Grid.Column="0" Grid.Row="2" Margin="10" ItemsSource="{Binding Issues}">
+                <ListView Grid.Column="0" Grid.Row="2" Margin="10" ItemsSource="{Binding Issues}" SelectedItem="{Binding SelectedIssue}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <Border BorderThickness="1" BorderBrush="#EFEFEF" Padding="10" Margin="5">
@@ -111,9 +111,18 @@
                     <uc:MyTextBox x:Name="locationTextBox" Caption="Location" 
                       Hint="Enter your location" 
                       Text="{Binding LocationText, Mode=TwoWay}"/>
-                    <uc:MyTextBox x:Name="categoryTextBox" Caption="Category" 
-                      Hint="Select" 
-                      Text="{Binding CategoryText, Mode=TwoWay}"/>
+                    
+                    <TextBlock Text="Category:" VerticalAlignment="Center" Foreground="#97A5B4" FontSize="13" Margin="20 10 0 8" />
+                    <ComboBox x:Name="CategoryComboBox" SelectedItem="{Binding CategoryText, Mode=TwoWay}" Margin="20 10 20 0" Background="Transparent" BorderBrush="#E1E6EB">
+                        <!-- Add predefined options for Category -->
+                        <ComboBoxItem Content="Potholes" />
+                        <ComboBoxItem Content="Street Lights" />
+                        <ComboBoxItem Content="Garbage Collection" />
+                        <ComboBoxItem Content="Water Leak" />
+                        <ComboBoxItem Content="Public Transportation" />
+                        <ComboBoxItem Content="Other" />
+                    </ComboBox>
+
                     <uc:MyButton x:Name="mediaButton" Caption="Media Attachment"
                         Text="Attach"
                         ButtonClick="mediaButton_ButtonClick"/>

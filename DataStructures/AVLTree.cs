@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,21 +13,11 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStruct
 	public class AVLTree<T> where T : IComparable<T>
 	{
 		// FILEPATH
-		private static readonly string _filepath = GetFilePath();
+		private static readonly string _filePath = GetFilePath();
 
 		// Root node of the tree
 		private AVLTreeNode<T> root;
 
-		private static AVLTree<T> _instance;
-		public static AVLTree<T> Instance
-		{
-			get
-			{
-				if (_instance == null)
-					_instance = new AVLTree<T>();
-				return _instance;
-			}
-		}
 		//-----------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// Public property to access the root node of the tree.
@@ -39,12 +30,9 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStruct
 		/// <returns></returns>
 		private static string GetFilePath()
 		{
-			// Get the path of the file relative to the current directory.
-			string filePath = Path.Combine(Directory.GetCurrentDirectory(), "File", "requests.json");
-
-			// Ensure the directory exists before returning the file path.
+			string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			string filePath = Path.Combine(baseDirectory, "File", "requests.json");
 			EnsureDirectoryExists(filePath);
-
 			return filePath;
 		}
 		//-----------------------------------------------------------------------------------------------------------------------------//
@@ -263,20 +251,19 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStruct
 		/// <summary>
 		/// Save Tree to JSON
 		/// </summary>
-		/// <param name="filePath"></param>
-		public void SaveToJson(string filePath)
+		public void SaveToJson()
 		{
-			var data = InOrderTraversal();
-			Console.WriteLine($"Saving data: {data.Count} items");  // Debugging line
-
-			var json = JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented);
-
-			// Log file path and attempt to write
-			Console.WriteLine($"Saving to: {filePath}");
-
 			try
 			{
-				File.WriteAllText(filePath, json);
+				var data = InOrderTraversal();
+				Console.WriteLine($"Saving data: {data.Count} items");
+
+				var json = JsonConvert.SerializeObject(data, Formatting.Indented);
+				Console.WriteLine($"Saving to: {_filePath}");
+
+				EnsureDirectoryExists(_filePath);  // Ensure directory exists before writing.
+
+				File.WriteAllText(_filePath, json);
 				Console.WriteLine("File saved successfully.");
 			}
 			catch (Exception ex)
@@ -285,54 +272,23 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStruct
 			}
 		}
 
-
-
-		/*	public void SaveRequest(ServiceRequestViewModel viewModel)
-			{
-				// Save to AVL Tree
-				var newRequest = new T
-				{
-					Id = viewModel.Id,
-					Description = viewModel.Description,
-					Status = viewModel.Status,
-					RequestDate = viewModel.RequestDate,
-					Priority = viewModel.Priority
-				};
-				Instance.Insert(newRequest);
-
-				// Save to JSON
-				List<T> requests;
-
-				if (File.Exists(FILEPATH))
-				{
-					// Load existing requests
-					var json = File.ReadAllText(FILEPATH);
-					requests = JsonConvert.DeserializeObject<List<T>>(json) ?? new List<T>();
-				}
-				else
-				{
-					requests = new List<T>();
-				}
-
-				requests.Add(newRequest);
-
-				// Save back to the file
-				var updatedJson = JsonConvert.SerializeObject(requests, Newtonsoft.Json.Formatting.Indented);
-				File.WriteAllText(FILEPATH, updatedJson);
-			}
-	*/
-
 		//-----------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// Load Tree from JSON
 		/// </summary>
 		/// <param name="filePath"></param>
 		/// <returns></returns>
-		public static AVLTree<T> LoadFromJson(string filePath, Action<T> onItemLoaded = null)
+		public static AVLTree<T> LoadFromJson(Action<T> onItemLoaded = null)
 		{
 			try
 			{
-				var json = File.ReadAllText(filePath);
+				if (!File.Exists(_filePath))
+				{
+					Console.WriteLine("File does not exist.");
+					return null;
+				}
+
+				var json = File.ReadAllText(_filePath);
 				var data = JsonConvert.DeserializeObject<List<T>>(json);
 
 				if (data == null)
@@ -342,11 +298,13 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStruct
 
 				var tree = new AVLTree<T>();
 
-				foreach (var value in data)
+				foreach (var item in data)
 				{
-					tree.Insert(value);
-					onItemLoaded?.Invoke(value); // Perform additional actions
+					tree.Insert(item);
+					onItemLoaded?.Invoke(item);
 				}
+
+				InOrderTraversalHelper(tree.Root, onItemLoaded);
 
 				return tree;
 			}
@@ -357,7 +315,57 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStruct
 			}
 		}
 
-		
+		private static void InOrderTraversalHelper(AVLTreeNode<T> node, Action<T> onItemLoaded)
+		{
+			if (node == null) return;
+			InOrderTraversalHelper(node.Left, onItemLoaded);
+			onItemLoaded?.Invoke(node.Value);
+			InOrderTraversalHelper(node.Right, onItemLoaded);
+		}
+
+		/// <summary>
+		/// Searches the tree based on a predicate.
+		/// </summary>
+		public IEnumerable<T> Search(Func<T, bool> predicate)
+		{
+			var results = new List<T>();
+			SearchRecursive(root, predicate, results);
+			return results;
+		}
+
+		private void SearchRecursive(AVLTreeNode<T> node, Func<T, bool> predicate, List<T> results)
+		{
+			if (node == null) return;
+
+			// If the predicate matches, add to results
+			if (predicate(node.Value)) results.Add(node.Value);
+
+			// Recursively search the left and right subtrees
+			SearchRecursive(node.Left, predicate, results);
+			SearchRecursive(node.Right, predicate, results);
+		}
+
+
+		public IEnumerator<T> GetEnumerator()
+		{
+			// Perform an in-order traversal and return an enumerator over the results.
+			foreach (var value in InOrderTraversal())
+			{
+				yield return value;  // Yield each value in the in-order traversal.
+			}
+		}
+
+		//IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+
+		public List<T> ToList()
+		{
+			var list = new List<T>();
+			if (root != null)
+			{
+				InOrderTraversal(root, list);
+			}
+			return list;
+		}
 
 	}
 }

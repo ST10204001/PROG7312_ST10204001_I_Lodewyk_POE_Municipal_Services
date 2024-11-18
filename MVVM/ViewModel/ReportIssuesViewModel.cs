@@ -1,7 +1,13 @@
-﻿using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.Helpers;
+﻿using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStructures;
+using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.Helpers;
 using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.Model;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+using PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.View.Windows;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewModel
@@ -12,7 +18,27 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 	/// </summary>
 	public class ReportIssuesViewModel : ViewModelBase
 	{
-		public ObservableCollection<Issue> Issues { get; set; }
+		private readonly RedBlackTree<Issue> _issuesTree = new RedBlackTree<Issue>();
+
+		// Static file path for persistence
+		private static readonly string FILEPATH = GetFilePath();
+		public IEnumerable<Issue> Issues => _issuesTree.ToList();
+
+
+		private Issue _selectedIssue;
+		public Issue SelectedIssue
+		{
+			get => _selectedIssue;
+			set
+			{
+				_selectedIssue = value;
+				OnPropertyChanged(nameof(SelectedIssue));
+				if (_selectedIssue != null)
+				{
+					ShowIssueDetails(); // Display details on selection
+				}
+			}
+		}
 
 		private string _locationText;
 		public string LocationText
@@ -61,6 +87,7 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 			}
 		}
 
+
 		public ICommand SubmitIssueCommand { get; }
 
 		private int _completionPercentage;
@@ -74,12 +101,19 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 			}
 		}
 
+		private void ShowIssueDetails()
+		{
+			var detailWindow = new ReportIssuesWindow(SelectedIssue);
+			detailWindow.ShowDialog();
+		}
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// Default Constructor
 		/// </summary>
 		public ReportIssuesViewModel()
 		{
-			Issues = new ObservableCollection<Issue>();
+			// Load issues from the file when the ViewModel is initialized
+			_issuesTree.LoadFromFile(FILEPATH);
 
 			// Initialize commands
 			SubmitIssueCommand = new RelayCommand(SubmitIssue, CanSubmitIssue);
@@ -87,7 +121,7 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 			// Initialize default values
 			ClearInputs();
 		}
-
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// Submits a new issue by creating an Issue object and adding it to the collection.
 		/// Clears the input fields after submission.
@@ -95,10 +129,12 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 		private void SubmitIssue()
 		{
 			var newIssue = new Issue(LocationText, CategoryText, DescriptionText, MediaUrl);
-			Issues.Add(newIssue);
+			_issuesTree.Insert(newIssue);
+			SaveIssuesToJson(FILEPATH);
+			MessageBox.Show($"Issues saved to {FILEPATH}");
 			ClearInputs();
 		}
-
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// Checks if the form can be submitted based on the presence of required fields.
 		/// Returns true if all required fields are filled; otherwise, false.
@@ -109,7 +145,7 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 				   !string.IsNullOrWhiteSpace(CategoryText) &&
 				   !string.IsNullOrWhiteSpace(DescriptionText);
 		}
-
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// Clears input fields after submission to prepare for new entries.
 		/// </summary>
@@ -123,7 +159,7 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 			// Update completion percentage
 			UpdateFormCompletion();
 		}
-
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// Updates the completion percentage based on the number of filled fields.
 		/// </summary>
@@ -134,23 +170,18 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 				CompletionPercentage = (filledFields * 100) / totalFields;
 			}
 		}
-
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// Updates the completion status of the form based on the filled fields.
 		/// Calculates the number of filled fields and updates the completion percentage.
 		/// </summary>
 		private void UpdateFormCompletion()
 		{
-			int filledFields = 0;
-			int totalFields = 3; // LocationText, CategoryText, and DescriptionText
-
-			if (!string.IsNullOrWhiteSpace(LocationText)) filledFields++;
-			if (!string.IsNullOrWhiteSpace(CategoryText)) filledFields++;
-			if (!string.IsNullOrWhiteSpace(DescriptionText)) filledFields++;
-
-			UpdateCompletionPercentage(totalFields, filledFields);
+			var fields = new[] { LocationText, CategoryText, DescriptionText };
+			int filledFields = fields.Count(field => !string.IsNullOrWhiteSpace(field));
+			UpdateCompletionPercentage(fields.Length, filledFields);
 		}
-
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
 		/// <summary>
 		/// Attaches media by storing the file path.
 		/// Updates the MediaUrl property and any relevant flags based on the media type.
@@ -164,6 +195,45 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 				OnPropertyChanged(nameof(MediaUrl));
 			}
 		}
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		public void SaveIssuesToJson(string filePath)
+		{
+			try
+			{
+				var issuesList = _issuesTree.ToList();
+				var json = JsonSerializer.Serialize(issuesList, new JsonSerializerOptions { WriteIndented = true });
+				File.WriteAllText(filePath, json);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"Error saving issues: {ex.Message}");
+			}
+		}
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Gets the file path for storing issues
+		/// </summary>
+		private static string GetFilePath()
+		{
+			string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+			string filePath = Path.Combine(baseDirectory, "File", "issues.json");
+			EnsureDirectoryExists(filePath);
+			return filePath;
+		}
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		/// <summary>
+		/// Ensures the directory for the JSON file exists.
+		/// </summary>
+		private static void EnsureDirectoryExists(string filePath)
+		{
+			string directoryPath = Path.GetDirectoryName(filePath);
+			if (!Directory.Exists(directoryPath))
+			{
+				Directory.CreateDirectory(directoryPath);
+			}
+		}
+		//-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
+		
 	}
 }
 //-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
