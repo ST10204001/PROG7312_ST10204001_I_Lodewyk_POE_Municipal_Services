@@ -11,28 +11,33 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStruct
 		{
 			List<Edge> mstEdges = new List<Edge>();
 
-			// Example: Kruskal's Algorithm
-			var edges = graph.GetAllEdges(); // This should return all the edges in the graph
-			var sortedEdges = edges.OrderBy(e => e.Weight).ToList(); // Sort edges by weight
+			// Map node IDs to sequential indices
+			var idMapping = graph.Requests.Keys.Select((id, index) => new { id, index })
+											   .ToDictionary(x => x.id, x => x.index);
 
-			var disjointSet = new DisjointSet(graph.NodeCount); // Implement DisjointSet for cycle detection
+			// Initialize DisjointSet with the number of unique nodes
+			var disjointSet = new DisjointSet(idMapping.Count);
+
+			// Get all edges and sort them by weight
+			var edges = graph.GetAllEdges(); // Assuming this returns all edges in the graph
+			var sortedEdges = edges.OrderBy(e => e.Weight).ToList();
 
 			foreach (var edge in sortedEdges)
 			{
-				// Use the Id of the ServiceRequest for the disjoint set operations
-				startNodeId = edge.Start.Id; // Use the Id of the start request
-				int endNodeId = edge.End.Id;     // Use the Id of the end request
+				// Use the mapped indices for Find and Union operations
+				int startMapped = idMapping[edge.Start.Id];
+				int endMapped = idMapping[edge.End.Id];
 
-				// If the nodes are not in the same set, add this edge to the MST
-				if (disjointSet.Find(startNodeId) != disjointSet.Find(endNodeId))
+				if (disjointSet.Find(startMapped) != disjointSet.Find(endMapped))
 				{
 					mstEdges.Add(edge);
-					disjointSet.Union(startNodeId, endNodeId); // Union the sets by Id
+					disjointSet.Union(startMapped, endMapped);
 				}
 			}
 
 			return mstEdges;
 		}
+
 	}
 
 }

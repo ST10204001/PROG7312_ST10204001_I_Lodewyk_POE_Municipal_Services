@@ -160,17 +160,63 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 
 		public void DisplayGraph()
 		{
+			Logger.Log("Starting DisplayGraph method.");
+
 			// Generate the graph description as a string
+			Logger.Log("Generating graph description.");
 			string graphText = GenerateGraphText(_serviceRequestGraph);
 
-			// Set the generated text to the TextBox (you can bind this to the UI)
-			GraphCanvas = graphText;  // Assuming GraphCanvas is the TextBox that holds the graph representation
+			// Generate MST description
+			Logger.Log("Generating Minimum Spanning Tree (MST).");
+			MinimumSpanningTree mstGenerator = new MinimumSpanningTree();
+			var mstEdges = mstGenerator.GenerateMST(_serviceRequestGraph, 0);
+			string mstText = GenerateMSTText(mstEdges);
+
+			Logger.Log("Combining graph and MST descriptions.");
+			// Combine the graph and MST text
+			string fullGraphText = graphText + "\nMinimum Spanning Tree:\n" + mstText;
+
+			// Set the combined text to the UI (e.g., GraphCanvas TextBox)
+			GraphCanvas = fullGraphText; // Assuming GraphCanvas is a bound UI property
+
+			Logger.Log("DisplayGraph method completed.");
 		}
 
-		// This method generates a textual description of the graph
 		private string GenerateGraphText(Graph graph)
 		{
+			Logger.Log("Starting GenerateGraphText method.");
 			var graphStringBuilder = new StringBuilder();
+
+			// Convert AVLTree to List
+			var serviceRequestsList = _serviceRequests.ToList();
+			Logger.Log($"Converted AVLTree to List with {serviceRequestsList.Count} items.");
+
+			// Traverse the AVL Tree and add service requests to the graph
+			foreach (var serviceRequest in serviceRequestsList)
+			{
+				if (!graph.Requests.ContainsKey(serviceRequest.Id))
+				{
+					Logger.Log($"Adding ServiceRequest with ID {serviceRequest.Id} to graph.");
+					graph.AddRequest(serviceRequest);
+				}
+
+				foreach (var otherRequest in serviceRequestsList)
+				{
+					if (serviceRequest.Id != otherRequest.Id)
+					{
+						if (serviceRequest.Priority == otherRequest.Priority)
+						{
+							Logger.Log($"Connecting ServiceRequest {serviceRequest.Id} and {otherRequest.Id} based on Priority.");
+							graph.AddEdge(serviceRequest.Id, otherRequest.Id, 1.0);
+						}
+						else if (serviceRequest.Status == otherRequest.Status)
+						{
+							Logger.Log($"Connecting ServiceRequest {serviceRequest.Id} and {otherRequest.Id} based on Status.");
+							graph.AddEdge(serviceRequest.Id, otherRequest.Id, 1.0);
+						}
+					}
+				}
+			}
 
 			// Traverse the graph's adjacency list
 			foreach (var node in graph.AdjacencyList)
@@ -178,19 +224,36 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 				var request = ServiceRequests.FirstOrDefault(r => r.Id == node.Key);
 				if (request != null)
 				{
+					Logger.Log($"Processing adjacency list for ServiceRequest ID {request.Id}.");
 					graphStringBuilder.AppendLine($"Request ID: {request.Id}, Description: {request.Description}");
 
-					// Display edges (relationships between requests)
 					foreach (var neighbour in node.Value)
 					{
 						graphStringBuilder.AppendLine($"  -> Connected to Request ID: {neighbour.End.Id}, Description: {neighbour.End.Description}");
 					}
 				}
-				graphStringBuilder.AppendLine();  // Add a line break between nodes for better readability
+				graphStringBuilder.AppendLine();
 			}
 
+			Logger.Log("GenerateGraphText method completed.");
 			return graphStringBuilder.ToString();
 		}
+
+		private string GenerateMSTText(List<Edge> mstEdges)
+		{
+			Logger.Log("Starting GenerateMSTText method.");
+			var mstStringBuilder = new StringBuilder();
+
+			foreach (var edge in mstEdges)
+			{
+				Logger.Log($"Adding MST edge from {edge.Start.Id} to {edge.End.Id} with weight {edge.Weight}.");
+				mstStringBuilder.AppendLine($"Edge from Request ID {edge.Start.Id} to Request ID {edge.End.Id} with weight {edge.Weight}");
+			}
+
+			Logger.Log("GenerateMSTText method completed.");
+			return mstStringBuilder.ToString();
+		}
+
 
 		// ----------------------------------------------------------------------------------------------------------------------------
 		// Private Methods
@@ -307,6 +370,7 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.MVVM.ViewM
 			SearchText = string.Empty;
 			SelectedStatusFilter = "All";
 			SelectedPriorityFilter = "All";
+			GraphCanvas = string.Empty;
 
 			// Reapply filters (this resets the list)
 			FilterRequests();

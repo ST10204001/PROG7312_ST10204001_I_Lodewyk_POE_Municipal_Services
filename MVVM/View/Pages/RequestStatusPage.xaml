@@ -23,7 +23,7 @@
                 <!-- Row for buttons -->
                 <RowDefinition Height="auto"/>
                 <!-- Row for the graph (expands) -->
-                <RowDefinition Height="*" MaxHeight="100" />
+                <RowDefinition Height="auto"/>
                 <!-- Row for list view -->
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
@@ -109,22 +109,19 @@
 
             </StackPanel>
 
-            <!-- Separator -->
-            <Separator Grid.Row="2" Grid.ColumnSpan="3" Height="2" Margin="0 20 0 20" Background="#A1B0B7"/>
- 
             <!-- Display graph as text -->
             <TextBox
-                 Text="{Binding GraphCanvas}" 
-                 Grid.Row="2"
-                 VerticalScrollBarVisibility="Auto" 
-                 HorizontalScrollBarVisibility="Auto" 
-                 AcceptsReturn="True" 
-                 IsReadOnly="True" 
-                 FontFamily="Consolas" 
-                 FontSize="14" 
-                 VerticalAlignment="Top" 
-                 Margin="10,10,10,10"/>
-            
+      Text="{Binding GraphCanvas}" 
+      Grid.Row="2"
+      VerticalScrollBarVisibility="Auto" 
+      HorizontalScrollBarVisibility="Auto" 
+      AcceptsReturn="True" 
+      IsReadOnly="True" 
+      FontFamily="Consolas" 
+      FontSize="14" 
+      VerticalAlignment="Top" 
+      Margin="10,10,10,10"/>
+
             <!-- List View -->
             <ScrollViewer Grid.Row="3" Margin="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
                 <Grid>

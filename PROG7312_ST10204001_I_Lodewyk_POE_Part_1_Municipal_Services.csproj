@@ -198,6 +198,7 @@
     <Compile Include="DataStructures\PriorityQueue.cs" />
     <Compile Include="DataStructures\RedBlackTree.cs" />
     <Compile Include="Helpers\EventsManager.cs" />
+    <Compile Include="Helpers\Logger.cs" />
     <Compile Include="Helpers\RequestManager.cs" />
     <Compile Include="MVVM\Model\Graph.cs" />
     <Compile Include="Helpers\HeightConverter.cs" />

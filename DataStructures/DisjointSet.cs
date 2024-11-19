@@ -27,12 +27,18 @@ namespace PROG7312_ST10204001_I_Lodewyk_POE_Part_1_Municipal_Services.DataStruct
 		// Find the root of the set containing `x`
 		public int Find(int x)
 		{
+			if (x < 0 || x >= parent.Length)
+			{
+				throw new ArgumentOutOfRangeException(nameof(x), $"Invalid index: {x}. Size: {parent.Length}");
+			}
+
 			if (parent[x] != x)
 			{
 				parent[x] = Find(parent[x]); // Path compression
 			}
 			return parent[x];
 		}
+
 
 		// Union the sets containing `x` and `y`
 		public void Union(int x, int y)
